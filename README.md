@@ -28,6 +28,10 @@ setupCSG(P5)
 
 ### Example
 
+<table>
+<tr>
+<td>
+
 ```js
 let deathStar
 
@@ -51,6 +55,15 @@ function draw() {
   model(deathStar)
 }
 ```
+
+</td>
+<td>
+
+<img width="296" alt="image" src="https://github.com/davepagurek/p5.csg/assets/5315059/a18828d9-e670-4194-a449-f6bed0c883c2">
+  
+</td>
+</tr>
+</table>
 
 ### Reference
 
