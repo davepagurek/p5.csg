@@ -1,0 +1,39 @@
+{
+  "name": "@davepagurek/p5.csg",
+  "version": "0.0.1",
+  "main": "build/p5.csg.js",
+  "author": "Dave Pagurek <dave@davepagurek.com>",
+  "license": "MIT",
+  "types": "build/p5.csg.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davepagurek/p5.csg.git"
+  },
+  "bugs": {
+    "url": "https://github.com/davepagurek/p5.csg/issues"
+  },
+  "homepage": "https://github.com/davepagurek/p5.csg",
+  "dependencies": {
+    "@types/p5": "^1.7.6",
+    "csg": "^1.0.1",
+    "p5": "^1.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.5",
+    "gh-pages": "^3.2.3",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.4",
+    "webpack": "^5.41.1",
+    "webpack-cli": "^4.7.2"
+  },
+  "scripts": {
+    "build": "yarn generate:js",
+    "generate:js": "yarn run webpack",
+    "deploy": "yarn build && yarn run gh-pages -d .",
+    "publish": "npm publish --access public"
+  },
+  "files": [
+    "build"
+  ]
+}
