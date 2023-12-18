@@ -65,6 +65,8 @@ function draw() {
 </tr>
 </table>
 
+Live: https://editor.p5js.org/davepagurek/sketches/f5QmdBoVI
+
 ### Reference
 
 Create a new CSG wrapper object with the `csg` function. It takes one of the following two inputs:
