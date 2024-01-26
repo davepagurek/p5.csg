@@ -3,6 +3,10 @@ import CSG from "csg";
 
 type CSGInput = (() => void) | P5.Geometry;
 type CSGWrapperInput = CSGWrapper | CSGInput;
+type BooleanOptions = {
+  includeSelfFaces?: boolean;
+  includeOtherFaces?: boolean;
+};
 
 declare module "P5" {
   interface p5InstanceExtensions {
@@ -13,6 +17,7 @@ declare module "P5" {
   }
 
   interface Geometry {
+    gid: string;
     faces: Array<[number, number, number]>;
     vertices: Array<P5.Vector>;
     vertexNormals: Array<P5.Vector>;
@@ -33,6 +38,7 @@ function geometryToCSG(geom: P5.Geometry) {
                   : undefined,
               ),
           ),
+          { id: geom.gid },
         ),
     ),
   );
@@ -61,6 +67,17 @@ class CSGWrapper {
     this.csg = this.inputToCSG(input);
   }
 
+  private ids(): Set<string> {
+    const ids = new Set<string>();
+    const polygons = this.csg.toPolygons();
+    for (const polygon of polygons) {
+      if (polygon.shared?.id !== undefined) {
+        ids.add(polygon.shared.id);
+      }
+    }
+    return ids;
+  }
+
   private inputToGeom(input: CSGInput): P5.Geometry {
     if (input instanceof (this.p5.constructor as any as P5).Geometry) {
       return input as P5.Geometry;
@@ -85,24 +102,57 @@ class CSGWrapper {
     }
   }
 
-  union(other: CSGWrapperInput) {
-    return new CSGWrapper(
-      this.p5,
-      this.csg.union(this.inputToCSGWrapper(other).csg),
+  private applyBooleanOptions(
+    csg,
+    other: CSGWrapper,
+    { includeSelfFaces = true, includeOtherFaces = true }: BooleanOptions,
+  ) {
+    if (includeSelfFaces && includeOtherFaces) return csg;
+
+    const selfIDs = includeSelfFaces ? new Set<string>() : this.ids();
+    const otherIDs = includeOtherFaces ? new Set<string>() : other.ids();
+    return CSG.fromPolygons(
+      csg.toPolygons().filter((polygon: CSG.Polygon) => {
+        if (!includeSelfFaces && selfIDs.has(polygon.shared?.id)) {
+          return false;
+        }
+        if (!includeOtherFaces && otherIDs.has(polygon.shared?.id)) {
+          return false;
+        }
+        return true;
+      }),
     );
   }
 
-  subtract(other: CSGWrapperInput) {
+  union(other: CSGWrapperInput, options: BooleanOptions = {}) {
+    const otherCSG = this.inputToCSGWrapper(other);
     return new CSGWrapper(
       this.p5,
-      this.csg.subtract(this.inputToCSGWrapper(other).csg),
+      this.applyBooleanOptions(this.csg.union(otherCSG.csg), otherCSG, options),
     );
   }
 
-  intersect(other: CSGWrapperInput) {
+  subtract(other: CSGWrapperInput, options: BooleanOptions = {}) {
+    const otherCSG = this.inputToCSGWrapper(other);
     return new CSGWrapper(
       this.p5,
-      this.csg.intersect(this.inputToCSGWrapper(other).csg),
+      this.applyBooleanOptions(
+        this.csg.subtract(otherCSG.csg),
+        otherCSG,
+        options,
+      ),
+    );
+  }
+
+  intersect(other: CSGWrapperInput, options: BooleanOptions = {}) {
+    const otherCSG = this.inputToCSGWrapper(other);
+    return new CSGWrapper(
+      this.p5,
+      this.applyBooleanOptions(
+        this.csg.intersect(otherCSG.csg),
+        otherCSG,
+        options,
+      ),
     );
   }
 

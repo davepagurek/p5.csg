@@ -9,13 +9,13 @@ This is a library for doing <a href="https://en.wikipedia.org/wiki/Constructive_
 Add the library in a script tag:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@davepagurek/p5.csg@0.0.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@davepagurek/p5.csg@0.0.2"></script>
 ```
 
 Or on OpenProcessing, add the CDN link as a library:
 
 ```
-https://cdn.jsdelivr.net/npm/@davepagurek/p5.csg@0.0.1
+https://cdn.jsdelivr.net/npm/@davepagurek/p5.csg@0.0.2
 ```
 
 If you're using p5 without importing it globally, you can manually set up p5.csg:
@@ -84,13 +84,13 @@ Once a CSG wrapper object has been created, you can apply a Boolean operation to
 
 ```ts
 // Take the boundary of both shapes
-myCSG.union(other: CSGInput): CSGWrapper
+myCSG.union(other: CSGInput, options: BooleanOptions): CSGWrapper
 
 // Take a bite out of the current geometry, in the shape of the other
-myCSG.subtract(other: CSGInput): CSGWrapper
+myCSG.subtract(other: CSGInput, options: BooleanOptions): CSGWrapper
 
 // Take just the region that overlaps between two shapes
-myCSG.intersect(other: CSGInput): CSGWrapper
+myCSG.intersect(other: CSGInput, options: BooleanOptions): CSGWrapper
 
 // Flip the inside and outside of the current shape
 myCSG.invert(): CSGWrapper
@@ -100,4 +100,14 @@ myCSG.done(): p5.Geometry
 // Inputs to CSG methods can be either another CSG wrapper object,
 // a p5.Geometry, or a `buildGeometry` callback function.
 type CSGInput = CSGWrapper | p5.Geometry | Function
+
+// Optionally specify whether or not to include faces from one input
+// or another in the end result. By default, both are included, so
+// if you subtract one shape from another, you will still get a closed
+// shape as a result. If you do not include the other shape's faces,
+// the subtraction will leave a hole.
+type BooleanOptions = {
+  includeSelfFaces?: boolean;
+  includeOtherFaces?: boolean;
+}
 ```
