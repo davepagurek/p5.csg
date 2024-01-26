@@ -84,13 +84,13 @@ Once a CSG wrapper object has been created, you can apply a Boolean operation to
 
 ```ts
 // Take the boundary of both shapes
-myCSG.union(other: CSGInput, options: BooleanOptions): CSGWrapper
+myCSG.union(other: CSGInput, options?: BooleanOptions): CSGWrapper
 
 // Take a bite out of the current geometry, in the shape of the other
-myCSG.subtract(other: CSGInput, options: BooleanOptions): CSGWrapper
+myCSG.subtract(other: CSGInput, options?: BooleanOptions): CSGWrapper
 
 // Take just the region that overlaps between two shapes
-myCSG.intersect(other: CSGInput, options: BooleanOptions): CSGWrapper
+myCSG.intersect(other: CSGInput, options?: BooleanOptions): CSGWrapper
 
 // Flip the inside and outside of the current shape
 myCSG.invert(): CSGWrapper
