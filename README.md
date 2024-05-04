@@ -9,13 +9,13 @@ This is a library for doing <a href="https://en.wikipedia.org/wiki/Constructive_
 Add the library in a script tag:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@davepagurek/p5.csg@0.0.2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@davepagurek/p5.csg@0.0.3"></script>
 ```
 
 Or on OpenProcessing, add the CDN link as a library:
 
 ```
-https://cdn.jsdelivr.net/npm/@davepagurek/p5.csg@0.0.2
+https://cdn.jsdelivr.net/npm/@davepagurek/p5.csg@0.0.3
 ```
 
 If you're using p5 without importing it globally, you can manually set up p5.csg:
