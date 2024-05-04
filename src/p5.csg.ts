@@ -157,7 +157,7 @@ class CSGWrapper {
   }
 
   invert() {
-    return new CSGWrapper(this.p5, this.csg.invert());
+    return new CSGWrapper(this.p5, this.csg.inverse());
   }
 
   done() {
